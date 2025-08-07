@@ -17,7 +17,7 @@ app.post('/api/summarize', async (req, res) => {
     return res.status(400).json({ error: 'emailText es requerido' });
   }
 
-  const systemPrompt = \`Eres un asistente que resume correos y sugiere respuestas educadas, claras y concisas. Devuelve un JSON con las claves: "summary" y "reply".\`;
+  const systemPrompt = `Eres un asistente que resume correos y sugiere respuestas educadas, claras y concisas. Devuelve un JSON con las claves: "summary" y "reply".`;
 
   const userPrompt = \`Correo:\n\${emailText}\n\nGenera un resumen y una respuesta sugerida en formato JSON.\`;
 

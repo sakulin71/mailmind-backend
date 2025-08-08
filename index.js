@@ -15,8 +15,14 @@ app.post("/api/summarize", async (req, res) => {
   const { emailText } = req.body;
   if (!emailText) return res.status(400).json({ error: "emailText es requerido" });
 
-  const systemPrompt = `Eres un asistente que resume correos y sugiere respuestas educadas, claras y concisas. Devuelve un JSON con las claves: "summary" y "reply".`;
-  const userPrompt = `Correo:\n${emailText}\n\nGenera un resumen y una respuesta sugerida en formato JSON.`;
+const systemPrompt = `Eres un asistente de correo. Analiza el contenido, detecta automáticamente el idioma y responde en ese mismo idioma.
+Debes devolver un resumen y una respuesta educada, clara y breve, ambos en el idioma original del correo.
+Devuelve el resultado en formato JSON con las claves: "summary" y "reply". Por favor, responde SOLO con el JSON estrictamente.`;
+
+const userPrompt = `Correo:\n"""${emailText}"""\n\nDevuelve el resumen y la respuesta sugerida en formato JSON.`;
+
+
+
 
   try {
     // Usamos fetch global (Node 18+). Render usa Node 22 así que está disponible.

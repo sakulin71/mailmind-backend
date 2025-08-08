@@ -16,13 +16,21 @@ app.post("/api/summarize", async (req, res) => {
   if (!emailText) return res.status(400).json({ error: "emailText es requerido" });
 
   const systemPrompt = `
-Eres un asistente de correo electrónico. Analiza el contenido del correo, detecta automáticamente el idioma en que está escrito y responde exclusivamente en ese mismo idioma.
-Genera un resumen breve y una respuesta sugerida clara y educada, ambos en el idioma original del correo.
-No traduzcas ni cambies el idioma.
-Devuelve el resultado en formato JSON con las claves: "summary" y "reply".
+Eres un asistente que procesa correos electrónicos. Detecta automáticamente el idioma original del correo y responde exclusivamente en ese idioma, sin traducir ni cambiarlo.
+Genera dos cosas:
+1) Un resumen breve del correo, en el mismo idioma.
+2) Una respuesta educada, clara y concisa, también en ese idioma.
+Devuelve SOLO un JSON con las claves: "summary" y "reply".
+
+Ejemplo de respuesta JSON (si el correo está en francés):
+{
+  "summary": "Résumé bref du courriel.",
+  "reply": "Réponse polie et concise."
+}
+No devuelvas nada en español si el correo no está en español.
 `;
 
-  const userPrompt = `Correo:\n"""${emailText}"""\n\nDevuelve el resumen y la respuesta sugerida en formato JSON.`;
+const userPrompt = `Correo:\n"""${emailText}"""\n\nDevuelve SOLO el resumen y la respuesta sugerida en formato JSON. No añadas texto extra.`;
 
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
